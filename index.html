@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List Application</title>
+    <link rel="stylesheet" href="./style.css"> 
+</head>
+<body>
+<div class="container">
+    <div class="todo-app">
+        <h2>To-Do List<img src="./images/notes.png" alt=""></h2>
+        <div class="row">
+            <input type="text" name="" id="input-box" placeholder="Enter Your Text Here:">
+            <button onclick="addTask()">ADD</button>
+        </div>
+        <ul id="list-container">
+            <!-- Task items will be added here dynamically -->
+        </ul>
+    </div>
+</div>
+
+<script>
+    const listContainer = document.getElementById("list-container");
+    const inputBox = document.getElementById("input-box");
+
+    // Function to add a task
+    function addTask() {
+        if (inputBox.value === '') {
+            alert("Enter Some Data");
+        } else {
+            let li = document.createElement("li");
+            li.innerHTML = inputBox.value;
+            listContainer.appendChild(li);
+
+            let span = document.createElement("span");
+            span.innerHTML = "\u00d7";
+            li.appendChild(span);
+        }
+        inputBox.value = "";
+        saveTask();
+    }
+
+    // Event listener to toggle task completion and delete tasks
+    listContainer.addEventListener('click', function(e) {
+        if (e.target.tagName === "LI") {
+            e.target.classList.toggle("checked");
+            saveTask();
+        } else if (e.target.tagName === "SPAN") {
+            e.target.parentElement.remove();
+            saveTask();
+        }
+    });
+
+    // Function to save task list data to local storage
+    function saveTask() {
+        localStorage.setItem("data", listContainer.innerHTML);
+    }
+
+    // Function to retrieve and display task list data from local storage
+    function showTask() {
+        if(localStorage.getItem("data")){
+            listContainer.innerHTML = localStorage.getItem("data");
+        }
+    }
+
+    // Event listener to call showTask() when DOM content is loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        showTask();
+    });
+
+</script>
+</body>
+</html>
